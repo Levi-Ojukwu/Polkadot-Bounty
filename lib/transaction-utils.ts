@@ -1,5 +1,4 @@
-    import { getTypedApi } from "./polkadot-client"
-    import { Binary } from "polkadot-api"
+import { getTypedApi } from "./polkadot-client"
 
       export interface TransactionResult {
         hash: string
@@ -29,11 +28,11 @@
 
           const tx = typedApi.tx.Bounties.propose_bounty({
             description: `${title}: ${description}`,
-            value: BigInt(value),
+            value: value.toString()
           })
 
           // console.log("[v0] Transaction created:", tx)
-          console.log("[v0] Creating bounty transaction with value:", value)
+          console.log("Creating bounty transaction with value:", value.toString())
 
           const result = await tx.signAndSubmit(signer)
 
@@ -43,7 +42,7 @@
             success: true,
           }
         } catch (error) {
-          console.error("[v0] Failed to create bounty:", error)
+          console.error("Failed to create bounty:", error)
           return {
             hash: "",
             success: false,
@@ -65,7 +64,7 @@
 
           return {
             hash: result.txHash,
-            blockHash: result.blockHash,
+            blockHash: result.blockHash,  
             success: true,
           }
         } catch (error) {
@@ -94,7 +93,7 @@
             success: true,
           }
         } catch (error) {
-          console.error("[v0] Failed to claim bounty:", error)
+          console.error("Failed to claim bounty:", error)
           return {
             hash: "",
             success: false,

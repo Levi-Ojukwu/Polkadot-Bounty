@@ -8,13 +8,13 @@ let bountiesSdkInstance: any = null
 export async function getPolkadotClient() {
   if (clientInstance) return clientInstance
 
-  console.log("[v0] Connecting to Paseo testnet...")
+  console.log("Connecting to Paseo testnet...")
   
   // Use WebSocket provider for Paseo testnet
   const provider = getWsProvider("wss://paseo-rpc.dwellir.com")
   clientInstance = createClient(provider)
   
-  console.log("[v0] Client created:", clientInstance)
+  console.log("Client created:", clientInstance)
   return clientInstance
 }
 
@@ -30,13 +30,13 @@ export async function getBountiesSdk() {
 
 export async function getTypedApi() {
   const client = await getPolkadotClient()
-  console.log("[v0] Getting unsafe API from client...")
+  console.log("Getting unsafe API from client...")
   const api = client.getUnsafeApi()
-  console.log("[v0] API obtained:", api)
+  console.log("API obtained:", api)
   
   // Wait a bit for the runtime to be loaded
   await new Promise(resolve => setTimeout(resolve, 1000))
   
-  console.log("[v0] API after wait:", api)
+  console.log("API after wait:", api)
   return api
 }

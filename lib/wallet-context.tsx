@@ -10,7 +10,7 @@ interface WalletContextType {
   isConnecting: boolean
   connect: () => Promise<void>
   disconnect: () => void
-  signer: any | null
+  signer: any | null // PAPI Signer
 }
 
 const WalletContext = createContext<WalletContextType | undefined>(undefined)
@@ -25,30 +25,27 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   const connect = async () => {
     setIsConnecting(true)
     try {
-      // Check if Polkadot extension is available
-      const { web3Accounts, web3Enable, web3FromAddress } = await import("@polkadot/extension-dapp")
+      const { web3Accounts, web3Enable } = await import("@polkadot/extension-dapp")
+      const { getPolkadotSigner } = await import("polkadot-api/signer")
 
-      // Enable the extension
       const extensions = await web3Enable("Polkadot Bounties")
+      if (extensions.length === 0) throw new Error("No Polkadot extension found")
 
-      if (extensions.length === 0) {
-        throw new Error("No Polkadot extension found")
-      }
-
-      // Get all accounts
       const allAccounts = await web3Accounts()
+      if (allAccounts.length === 0) throw new Error("No accounts found")
 
-      if (allAccounts.length === 0) {
-        throw new Error("No accounts found")
-      }
-
+      const selectedAccount = allAccounts[0]
       setAccounts(allAccounts)
-      setAccount(allAccounts[0])
+      setAccount(selectedAccount)
 
-      // Get signer for the first account
-      const injector = await web3FromAddress(allAccounts[0].address)
-      setSigner(injector.signer)
+      // ✅ PAPI signer for transactions
+      const papiSigner = getPolkadotSigner(
+        extensions[0].signer,
+        selectedAccount.address,
+        (selectedAccount.type as "sr25519" | "ed25519" | "ecdsa") || "sr25519"
+      )
 
+      setSigner(papiSigner)
       setIsConnected(true)
     } catch (error) {
       console.error("Failed to connect wallet:", error)
@@ -66,15 +63,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <WalletContext.Provider
-      value={{
-        account,
-        accounts,
-        isConnected,
-        isConnecting,
-        connect,
-        disconnect,
-        signer,
-      }}
+      value={{ account, accounts, isConnected, isConnecting, connect, disconnect, signer }}
     >
       {children}
     </WalletContext.Provider>

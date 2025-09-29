@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Filter, Plus, RefreshCw } from "lucide-react"
 import { CreateBountyDialog } from "./create-bounty-dialog"
-import { useBountyData } from "@/hooks/use-bounty-data" // Added bounty data hook
+// import { useBountyData } from "@/hooks/use-bounty-data" // Added bounty data hook
 
 interface BountiesListProps {
   onCreateBounty: () => void
@@ -15,10 +15,48 @@ interface BountiesListProps {
 }
 
 export function BountiesList({ onCreateBounty, onViewBounty }: BountiesListProps) {
-  const { bounties, loading, error, refreshBounties } = useBountyData() // Using bounty data hook
+  // Mock data for now
+  const [bounties] = useState([
+    {
+      id: 1,
+      title: "Develop Polkadot Mobile Wallet",
+      description: "Create a secure and user-friendly mobile wallet application for Polkadot ecosystem with support for staking and governance features.",
+      value: "5,000 DOT",
+      status: "active" as const,
+      proposer: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
+      curator: "5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty",
+      createdAt: "2024-01-15T10:00:00Z",
+    },
+    {
+      id: 2,
+      title: "Substrate Runtime Optimization",
+      description: "Optimize runtime performance for better transaction throughput and reduced block times.",
+      value: "3,200 DOT",
+      status: "proposed" as const,
+      proposer: "5DAAnrj7VHTznn2AWBemMuyBwZWs6FNFjdyVXUeYum3PTXFy",
+      createdAt: "2024-01-20T14:30:00Z",
+    },
+    {
+      id: 3,
+      title: "Cross-chain Bridge Security Audit",
+      description: "Comprehensive security audit of the cross-chain bridge implementation with detailed vulnerability assessment.",
+      value: "8,500 DOT",
+      status: "approved" as const,
+      proposer: "5GNJqTPyNqANBkUVMN1LPPrxXnFouWXoe2wNSmmEoLctxiZY",
+      curator: "5HpG9w8EBLe5XCrbczpwq5TSXvedjrBGCwqxK1iQ7qUsSWFc",
+      createdAt: "2024-01-10T09:15:00Z",
+    },
+  ])
   const [filteredBounties, setFilteredBounties] = useState(bounties)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
+  const [loading] = useState(false)
+  const [error] = useState<string | null>(null)
+  
+  const refreshBounties = () => {
+    // Mock refresh - in real implementation this would reload data
+    console.log("Refreshing bounties...")
+  }
 
   useEffect(() => {
     filterBounties()

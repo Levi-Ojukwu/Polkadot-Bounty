@@ -16,22 +16,16 @@ import { getTypedApi } from "./polkadot-client"
         try {
           const typedApi = await getTypedApi()
           
-          // console.log("[v0] API instance:", typedApi)
-          // console.log("[v0] Available tx modules:", Object.keys(typedApi.tx))
-          // console.log("[v0] Bounties module:", typedApi.tx.Bounties)
-          
           // Check if Bounties module exists
           if (!typedApi.tx.Bounties) {
-            // console.error("[v0] Bounties module not found! Available modules:", Object.keys(typedApi.tx))
             throw new Error("Bounties module not available on this chain")
           }
 
-          const tx = typedApi.tx.Bounties.propose_bounty({
-            description: `${title}: ${description}`,
-            value: value.toString()
-          })
+          const tx = typedApi.tx.Bounties.propose_bounty(
+            value,                                  // Balance (Planck)
+            `${title}: ${description}`              // Description (string/Bytes)
+          )
 
-          // console.log("[v0] Transaction created:", tx)
           console.log("Creating bounty transaction with value:", value.toString())
 
           const result = await tx.signAndSubmit(signer)

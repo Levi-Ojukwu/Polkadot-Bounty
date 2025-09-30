@@ -66,7 +66,7 @@ export function useBountyData() {
 
       setBounties(mockBounties)
     } catch (err) {
-      console.error("[v0] Failed to load bounties:", err)
+      console.error("Failed to load bounties:", err)
       setError(err instanceof Error ? err.message : "Failed to load bounties")
     } finally {
       setLoading(false)
@@ -82,7 +82,7 @@ export function useBountyData() {
         await bountySubscriptionService.initialize()
 
         const unsubscribe = bountySubscriptionService.subscribe((update) => {
-          console.log("[v0] Bounty update received, refreshing data:", update)
+          console.log("Bounty update received, refreshing data:", update)
           // In a real implementation, you might update specific bounties
           // or refresh the entire list based on the update type
           loadBounties()
@@ -90,7 +90,7 @@ export function useBountyData() {
 
         return unsubscribe
       } catch (error) {
-        console.error("[v0] Failed to set up bounty subscription:", error)
+        console.error("Failed to set up bounty subscription:", error)
       }
     }
 

@@ -16,11 +16,11 @@ export function useBountyUpdates() {
         setIsConnected(true)
 
         unsubscribe = bountySubscriptionService.subscribe((update) => {
-          console.log("[v0] Received bounty update:", update)
+          console.log("Received bounty update:", update)
           setUpdates((prev) => [update, ...prev.slice(0, 49)]) // Keep last 50 updates
         })
       } catch (error) {
-        console.error("[v0] Failed to initialize bounty subscription:", error)
+        console.error("Failed to initialize bounty subscription:", error)
         setIsConnected(false)
       }
     }

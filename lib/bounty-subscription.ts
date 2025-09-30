@@ -21,7 +21,7 @@ export class BountySubscriptionService {
       this.isSubscribed = true
       console.log("[v0] Bounty subscription service initialized")
     } catch (error) {
-      console.error("[v0] Failed to initialize bounty subscription service:", error)
+      console.error("Failed to initialize bounty subscription service:", error)
     }
   }
 
@@ -30,7 +30,7 @@ export class BountySubscriptionService {
 
     // Subscribe to bounty changes
     this.bountiesSdk.watch.bounties$.subscribe((bounties: Map<number, any>) => {
-      console.log("[v0] Bounties updated:", bounties.size)
+      console.log("[Bounties updated:", bounties.size)
       this.notifySubscribers({
         type: "bounty_created",
         bountyId: 0,
@@ -41,7 +41,7 @@ export class BountySubscriptionService {
 
     // Subscribe to bounty IDs changes
     this.bountiesSdk.watch.bountyIds$.subscribe((bountyIds: number[]) => {
-      console.log("[v0] Bounty IDs updated:", bountyIds)
+      console.log("Bounty IDs updated:", bountyIds)
       this.notifySubscribers({
         type: "bounty_created",
         bountyId: 0,
